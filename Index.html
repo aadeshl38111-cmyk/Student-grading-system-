@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Student Grading System</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to right, #74ebd5, #acb6e5);
+        margin: 0;
+        padding: 20px;
+      }
+      h1 {
+        text-align: center;
+        color: #fff;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      }
+      .container {
+        max-width: 900px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 1s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      label {
+        display: block;
+        margin: 8px 0 4px;
+        font-weight: bold;
+      }
+      input {
+        width: 95%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+      }
+      .subject-input {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .subject-input input {
+        flex: 1;
+      }
+      .btn {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin: 5px 0;
+        transition: 0.3s;
+      }
+      .btn:hover {
+        background: #0056b3;
+      }
+      .btn-danger {
+        background: #dc3545;
+      }
+      .btn-danger:hover {
+        background: #a71d2a;
+      }
+      .btn-secondary {
+        background: #6c757d;
+      }
+      .btn-secondary:hover {
+        background: #565e64;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: center;
+      }
+      th {
+        background: #007bff;
+        color: white;
+      }
+      .badge {
+        padding: 5px 10px;
+        border-radius: 12px;
+        color: white;
+        font-weight: bold;
+      }
+      .grade-A {
+        background: #28a745;
+      } /* Green */
+      .grade-B {
+        background: #17a2b8;
+      } /* Blue */
+      .grade-C {
+        background: #ffc107;
+      } /* Yellow */
+      .grade-D {
+        background: #fd7e14;
+      } /* Orange */
+      .grade-F {
+        background: #dc3545;
+      } /* Red */
+      .search-box {
+        margin: 15px 0;
+        text-align: right;
+      }
+      .search-box input {
+        width: 200px;
+        padding: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🎓 Student Grading System</h1>
+    <div class="container">
+      <form id="gradeForm">
+        <label>Student Name:</label>
+        <input type="text" id="name" required />
+
+        <div id="subjectsContainer">
+          <div class="subject-input">
+            <input
+              type="number"
+              placeholder="Enter Subject Marks"
+              min="0"
+              max="100"
+              required
+            />
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-secondary" id="addSubject">
+          + Add Subject
+        </button>
+        <button type="submit" class="btn">Add Student</button>
+        <button type="button" class="btn btn-danger" id="clearTable">
+          Clear All Records
+        </button>
+      </form>
+
+      <div class="search-box">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="🔍 Search Student..."
+        />
+      </div>
+
+      <table id="resultTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Marks</th>
+            <th>Total</th>
+            <th>Average</th>
+            <th>Grade</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <script>
+      const form = document.getElementById("gradeForm");
+      const tableBody = document.querySelector("#resultTable tbody");
+      const subjectsContainer = document.getElementById("subjectsContainer");
+      const addSubjectBtn = document.getElementById("addSubject");
+      const searchInput = document.getElementById("searchInput");
+      const clearTableBtn = document.getElementById("clearTable");
+
+      // Add subject input dynamically
+      addSubjectBtn.addEventListener("click", () => {
+        const div = document.createElement("div");
+        div.classList.add("subject-input");
+        div.innerHTML = `<input type="number" placeholder="Enter Subject Marks" min="0" max="100" required>
+                       <button type="button" class="btn btn-danger removeSubject">X</button>`;
+        subjectsContainer.appendChild(div);
+
+        div.querySelector(".removeSubject").addEventListener("click", () => {
+          div.remove();
+        });
+      });
+
+      // Handle form submission
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const marks = [...subjectsContainer.querySelectorAll("input")].map(
+          (input) => parseInt(input.value)
+        );
+
+        const total = marks.reduce((a, b) => a + b, 0);
+        const avg = (total / marks.length).toFixed(2);
+
+        let grade, gradeClass;
+        if (avg >= 90) {
+          grade = "A+";
+          gradeClass = "grade-A";
+        } else if (avg >= 80) {
+          grade = "A";
+          gradeClass = "grade-A";
+        } else if (avg >= 70) {
+          grade = "B";
+          gradeClass = "grade-B";
+        } else if (avg >= 60) {
+          grade = "C";
+          gradeClass = "grade-C";
+        } else if (avg >= 50) {
+          grade = "D";
+          gradeClass = "grade-D";
+        } else {
+          grade = "F";
+          gradeClass = "grade-F";
+        }
+
+        const row = `
+        <tr>
+          <td>${name}</td>
+          <td>${marks.join(", ")}</td>
+          <td>${total}</td>
+          <td>${avg}</td>
+          <td><span class="badge ${gradeClass}">${grade}</span></td>
+        </tr>
+      `;
+
+        tableBody.insertAdjacentHTML("beforeend", row);
+
+        form.reset();
+        subjectsContainer.innerHTML = `
+        <div class="subject-input">
+          <input type="number" placeholder="Enter Subject Marks" min="0" max="100" required>
+        </div>`;
+      });
+
+      // Search functionality
+      searchInput.addEventListener("keyup", function () {
+        const filter = searchInput.value.toLowerCase();
+        const rows = tableBody.getElementsByTagName("tr");
+        for (let row of rows) {
+          const name = row.cells[0].textContent.toLowerCase();
+          row.style.display = name.includes(filter) ? "" : "none";
+        }
+      });
+
+      // Clear all records
+      clearTableBtn.addEventListener("click", () => {
+        tableBody.innerHTML = "";
+      });
+    </script>
+  </body>
+</html>
