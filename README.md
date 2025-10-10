@@ -1,7 +1,7 @@
 # AIM
 The aim of the Student Grading System is to automate the process of recording, calculating, and analyzing student marks efficiently and accurately.
 It reduces manual work, minimizes errors, and provides quick access to student performance through a secure and organized platform.
-#Technology Used
+# Technology Used
 Frontend: HTML, CSS, JavaScript (or React for modern UI)
 Backend: Node.js with Express / Python (Django) / PHP
 Database: MySQL / MongoDB
@@ -9,7 +9,9 @@ Optional AIM Features:
 AI tools (Python – Scikit-learn/TensorFlow) for performance prediction
 Chart.js / Recharts for data visualization
 Cloud storage (Firebase / AWS) for backup and access anywhere
-#Features
+
+# Features
+
 1. Student Information Management
 Add, update, and delete student records
 Maintain personal and academic details
